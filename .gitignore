@@ -1,0 +1,46 @@
+# .NET (Backend) specific
+bin/
+obj/
+*.db
+*.db-shm
+*.db-wal
+appsettings.Development.json
+appsettings.json
+*.bak
+*.log
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Flutter / Dart specific
+**/build/
+**/.dart_tool/
+**/.packages
+**/pubspec.lock
+
+# iOS/Android generated files
+**/ios/Flutter/.symlinks/
+**/ios/Flutter/Flutter.framework/
+**/android/.gradle/
+**/android/build/
+
+# IDE-specific files
+.idea/
+.vscode/
+.metadata/
+
+# macOS specific
+.DS_Store
+
+# Windows specific
+Thumbs.db
+
+# Node modules (if applicable)
+node_modules/
+
+# Package manager files
+package-lock.json
+yarn.lock
+
+# Ignore Visual Studio files
+.vs/
