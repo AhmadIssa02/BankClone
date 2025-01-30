@@ -1,6 +1,6 @@
-import 'package:bank_app/Modules/UserDataSource.dart';
-import 'package:bank_app/Modules/UserModel.dart';
-import 'package:bank_app/Modules/UserRepository.dart';
+import 'package:bank_app/Modules/user_data_source.dart';
+import 'package:bank_app/Modules/user_model.dart';
+import 'package:bank_app/Modules/user_repository.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {

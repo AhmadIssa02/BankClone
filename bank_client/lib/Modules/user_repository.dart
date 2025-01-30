@@ -1,5 +1,5 @@
-import 'package:bank_app/Modules/UserDataSource.dart';
-import 'package:bank_app/Modules/UserModel.dart';
+import 'package:bank_app/Modules/user_data_source.dart';
+import 'package:bank_app/Modules/user_model.dart';
 
 class UserRepository {
   final UserDataSource dataSource;
