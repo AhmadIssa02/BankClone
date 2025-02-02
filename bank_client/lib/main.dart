@@ -1,10 +1,13 @@
+import 'package:bank_app/Screens/landing_screen.dart';
+import 'package:bank_app/Screens/login_screen.dart';
 import 'package:bank_app/Screens/main_screen.dart';
 import 'package:bank_app/Screens/register_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color tertiary = Color(0xFFD30132); // Ternary color: #d30132
-  static const Color secondary = Color(0xFF5288AA); // Secondary color: #5288aa
+  static const Color secondary =
+      Color.fromARGB(255, 103, 153, 199); // Secondary color: #5288aa
   static const Color primary = Color(0xFF233645); // Primary color: #233645
   static const Color white = Colors.white;
   static const Color black = Colors.black;
@@ -27,15 +30,12 @@ class MyApp extends StatelessWidget {
         indicatorColor: AppColors.secondary,
         cardColor: AppColors.tertiary,
         canvasColor: AppColors.canvas,
-
-        // ElevatedButton theme customization
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
             foregroundColor: AppColors.white,
           ),
         ),
-
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: AppColors.black),
           bodyMedium: TextStyle(color: AppColors.white),
@@ -45,7 +45,6 @@ class MyApp extends StatelessWidget {
             fontSize: 22,
           ),
         ),
-
         cardTheme: CardTheme(
           color: AppColors.primary,
           margin: const EdgeInsets.symmetric(
@@ -57,11 +56,10 @@ class MyApp extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const RegisterScreen(),
+      home: const MainScreen(),
     );
   }
 }

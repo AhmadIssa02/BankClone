@@ -40,7 +40,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Register')),
+        title: const Text('Register'),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -171,7 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 30, horizontal: 30),
+                        vertical: 20, horizontal: 20),
                     textStyle: const TextStyle(fontSize: 20),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
