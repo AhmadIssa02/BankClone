@@ -11,7 +11,7 @@ class Rewards extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-            width: 170,
+            width: 175,
             height: 170,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -32,7 +32,6 @@ class Rewards extends StatelessWidget {
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
-                    // textAlign: TextAlign.left,
                   ),
                   Text(
                     "0.000 JOD",
@@ -45,15 +44,15 @@ class Rewards extends StatelessWidget {
                   Image.asset(
                     "assets/calendar.jpg",
                     height: 90,
-                    width: 150,
+                    width: 140,
                   ),
                 ],
               ),
             ),
           ),
           SizedBox(
-            width: 170,
-            height: 160,
+            width: 175,
+            height: 170,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,

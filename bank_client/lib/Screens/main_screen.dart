@@ -1,7 +1,9 @@
+import 'package:bank_app/Modules/Components/account_details.dart';
 import 'package:bank_app/Modules/Components/balance_card.dart';
 import 'package:bank_app/Modules/Components/rewards.dart';
 import 'package:bank_app/Modules/Components/services.dart';
 import 'package:bank_app/Modules/Components/soon.dart';
+import 'package:bank_app/Screens/settings.dart';
 import 'package:bank_app/Screens/soon_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -25,100 +27,146 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).canvasColor,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 50.0, left: 20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  width: 10,
-                ),
-                const Center(
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Color.fromARGB(255, 169, 22, 42),
-                    child: Text(
-                      "A",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 50.0, left: 20),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Center(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const SettingsScreen(),
+                          ),
+                        );
+                      },
+                      child: Stack(
+                        children: [
+                          const CircleAvatar(
+                            radius: 32,
+                            backgroundColor: Color.fromARGB(255, 169, 22, 42),
+                            child: Text(
+                              "A",
+                              style: TextStyle(
+                                fontSize: 22,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            right: 2,
+                            bottom: 5,
+                            child: Container(
+                              padding: const EdgeInsets.all(1),
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                              ),
+                              child: const Icon(
+                                Icons.settings_outlined,
+                                size: 20,
+                                color: Colors.black,
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  child: Text(
-                    'Good afternoon',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Good Afternoon',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        Text(
+                          'AHMAD ISSA',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 28, top: 12),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SoonScreen(),
-                            ),
-                          );
-                        },
-                        child: const Icon(
-                          Icons.mark_email_unread_outlined,
-                          size: 35,
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 28, top: 12),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SoonScreen(),
+                              ),
+                            );
+                          },
+                          child: const Icon(
+                            Icons.mark_email_unread_outlined,
+                            size: 35,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30.0, left: 10.0, right: 10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      _buildTab('Accounts'),
-                      _buildTab('Cards'),
-                      _buildTab('Loans'),
-                      _buildTab('Term Deposits'),
-                      _buildTab('Overdrafts'),
-                      _buildTab('Investments'),
-                    ],
+            Padding(
+              padding:
+                  const EdgeInsets.only(top: 30.0, left: 10.0, right: 10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        _buildTab('Accounts'),
+                        _buildTab('Cards'),
+                        _buildTab('Loans'),
+                        _buildTab('Term Deposits'),
+                        _buildTab('Overdrafts'),
+                        _buildTab('Investments'),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                _selectedTab == 'Accounts'
-                    ? _buildAccountsContent()
-                    : const Soon(),
-              ],
+                  const SizedBox(height: 20),
+                  _selectedTab == 'Accounts'
+                      ? _buildAccountsContent()
+                      : const Soon(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -227,6 +275,16 @@ class _MainScreenState extends State<MainScreen> {
           height: 20,
         ),
         const Rewards(),
+        const SizedBox(
+          height: 20,
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.0),
+          child: AccountDetails(),
+        ),
+        const SizedBox(
+          height: 40,
+        ),
       ],
     );
   }
