@@ -2,6 +2,7 @@ import 'package:bank_app/Screens/landing_screen.dart';
 import 'package:bank_app/Screens/login_screen.dart';
 import 'package:bank_app/Screens/main_screen.dart';
 import 'package:bank_app/Screens/register_screen.dart';
+import 'package:bank_app/Screens/settings.dart';
 import 'package:flutter/material.dart';
 
 class AppColors {
@@ -59,7 +60,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const MainScreen(),
+      home: const LandingScreen(),
     );
   }
 }

@@ -1,5 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'package:bank_app/Screens/landing_screen.dart';
+import 'package:bank_app/Screens/main_screen.dart';
+import 'package:bank_app/Screens/register_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -29,6 +32,12 @@ class _LoginScreenState extends State<LoginScreen> {
   void submit() {
     print(_email);
     print(_password);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MainScreen(),
+      ),
+    );
   }
 
   @override
@@ -134,15 +143,21 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Don't have an account? ",
+                              "Don't have an account yet?",
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 17,
                                 color: Theme.of(context).primaryColor,
                               ),
                             ),
                             TextButton(
                               onPressed: () {
-                                print("Navigate to Sign Up screen");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const RegisterScreen(),
+                                  ),
+                                );
                               },
                               child: Text(
                                 'Sign Up',
@@ -166,24 +181,25 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 20.0, right: 1.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
-                      );
-                      submit();
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 20),
-                    textStyle: const TextStyle(fontSize: 20),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                    onPressed: () {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Processing Data')),
+                        );
+                        submit();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 20),
+                      textStyle: const TextStyle(fontSize: 22),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                  ),
-                  child: const Text('Login'),
-                ),
+                    child: const Text(
+                      'Login',
+                    )),
               ),
             ),
           ],
