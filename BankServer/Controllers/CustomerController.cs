@@ -1,11 +1,6 @@
-﻿using BankServer.Models;
-using BankServer.Models.Domain;
-using BankServer.Models.DTOs;
-using BankServer.Repositories.Implementation;
-using BankServer.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using BankServer.Models.DTOs;
+using BankServer.Services.Implementations;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BankServer.Controllers
 {
@@ -13,44 +8,46 @@ namespace BankServer.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly ICustomerRepository _customerRepository;
-        public CustomerController(ICustomerRepository customerRepository)
+        private readonly ICustomerService _customerService;
+
+        public CustomerController(ICustomerService customerService)
         {
-            _customerRepository = customerRepository;
+            _customerService = customerService;
         }
 
-        [HttpGet("getAll")]
-        public async Task<IActionResult> GetCustomers()
-        {
-            var customers = await _customerRepository.getAllCutsomers();
-            return Ok(customers);
-        }
-        [HttpPost]
-        public async Task<IActionResult> AddCustomer(CustomerDto customerdto)
-        {
-            return Ok(await _customerRepository.addCustomer(customerdto));
-
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> EditCustomer(CustomerDto customerdto)
-        {
-
-            var result = await _customerRepository.editCustomer(customerdto);
-
-            return Ok(result);
-        }
-        [HttpDelete]
-        public async Task<IActionResult> DeleteCustomer(string email)
-        {
-            var result = _customerRepository.deleteCustomer(email);
-            return Ok(result);
-        }
         [HttpGet("{email}")]
         public async Task<IActionResult> GetCustomerByEmail(string email)
         {
-            var result = _customerRepository.getCustomerByEmail(email);
+            var result = await _customerService.GetCustomerByEmailAsync(email);
             return Ok(result);
         }
+        [HttpGet("getAll")]
+        public async Task<IActionResult> GetCustomers()
+        {
+            var customers = await _customerService.GetAllCustomersAsync();
+            return Ok(customers);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCustomer(CustomerDto customerDto)
+        {
+            var result = await _customerService.AddCustomerAsync(customerDto);
+            return Ok(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> EditCustomer(CustomerDto customerDto)
+        {
+            var result = await _customerService.EditCustomerAsync(customerDto);
+            return Ok(result);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCustomer(string email)
+        {
+            var result = await _customerService.DeleteCustomerAsync(email);
+            return Ok(result);
+        }
+
     }
 }

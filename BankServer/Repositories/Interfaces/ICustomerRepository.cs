@@ -7,8 +7,8 @@
    {
       Task<Customer> getCustomerByEmail(string email);
       Task<IList<Customer>> getAllCutsomers();
-      Task<bool> addCustomer(CustomerDto customerdto);
-      Task<bool> editCustomer(CustomerDto customerdto);
+      Task<bool> addCustomer(Customer customerd);
+      Task<bool> editCustomer(Customer customer);
       Task<bool> deleteCustomer(string email);
    }
 }

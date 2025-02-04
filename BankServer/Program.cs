@@ -2,6 +2,7 @@ using System.Reflection;
 using BankServer.Models;
 using BankServer.Repositories.Implementation;
 using BankServer.Repositories.Interfaces;
+using BankServer.Services.Implementations;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,7 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 );
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 
 builder.Services.AddCors(options =>
