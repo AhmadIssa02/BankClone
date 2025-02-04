@@ -27,6 +27,7 @@ namespace BankServer.Services.Implementations
             var customer = _mapper.Map<Customer>(customerDto);
             customer.AccountNumber = accountNumber;
             customer.IBAN = iban;
+            customer.PasswordHash = customerDto.Password;
 
             return await _customerRepository.addCustomer(customer);
         }
@@ -35,6 +36,9 @@ namespace BankServer.Services.Implementations
         {
             var customer = _mapper.Map<Customer>(customerDto);
             customer.PasswordHash = customerDto.Password;
+            customer.FirstName = customerDto.FirstName;
+            customer.LastName = customerDto.LastName;
+
 
             return await _customerRepository.editCustomer(customer);
         }
@@ -52,6 +56,14 @@ namespace BankServer.Services.Implementations
         public async Task<Customer> GetCustomerByEmailAsync(string email)
         {
             return await _customerRepository.getCustomerByEmail(email);
+        }
+
+        public async Task<bool> ChangePasswordAsync(EditCustomerPasswordDto editCustomerDto)
+        {
+            var customer = _mapper.Map<Customer>(editCustomerDto);
+            customer.PasswordHash = editCustomerDto.Password;
+
+            return await _customerRepository.changePassword(customer);
         }
 
         private int GenerateRandomAccountNumber()

@@ -8,4 +8,5 @@ public interface ICustomerService
     Task<bool> DeleteCustomerAsync(string email);
     Task<IList<Customer>> GetAllCustomersAsync();
     Task<Customer> GetCustomerByEmailAsync(string email);
+    Task<bool> ChangePasswordAsync(EditCustomerPasswordDto editCustomerDto);
 }

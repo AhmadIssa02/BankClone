@@ -7,7 +7,9 @@ namespace BankServer.Mapping
     {
         public AutoMapper() { 
             CreateMap<Customer, CustomerDto>();
+            CreateMap<Customer, EditCustomerPasswordDto>();
             CreateMap<Customer, CustomerDto>().ReverseMap();
+            CreateMap<Customer, EditCustomerPasswordDto>().ReverseMap();
 
         }
     }

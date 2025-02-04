@@ -53,6 +53,8 @@ namespace BankServer.Repositories.Implementation
             }
 
             existingCustomer.PasswordHash = customer.PasswordHash;
+            existingCustomer.FirstName = customer.FirstName;
+            existingCustomer.LastName = customer.LastName;
 
             await _context.SaveChangesAsync();
 
@@ -68,6 +70,23 @@ namespace BankServer.Repositories.Implementation
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == email);
             return customer;
+        }
+
+        public async Task<bool> changePassword(Customer customer)
+        {
+            var existingCustomer = await _context.Customers
+                                                  .FirstOrDefaultAsync(c => c.Email == customer.Email);
+
+            if (existingCustomer == null)
+            {
+                return false;
+            }
+
+            existingCustomer.PasswordHash = customer.PasswordHash;
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         private bool IsValidEmail(string email)

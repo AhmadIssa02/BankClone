@@ -48,6 +48,11 @@ namespace BankServer.Controllers
             var result = await _customerService.DeleteCustomerAsync(email);
             return Ok(result);
         }
-
+        [HttpPut("changePassword")]
+        public async Task<IActionResult> ChangePassword(EditCustomerPasswordDto editCustomerDto)
+        {
+            var result = await _customerService.ChangePasswordAsync(editCustomerDto);
+            return Ok(result);
+        }
     }
 }
