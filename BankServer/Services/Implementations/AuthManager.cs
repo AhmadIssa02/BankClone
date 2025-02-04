@@ -85,7 +85,7 @@ namespace BankServer.Services.Implementations
 
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
-        public async Task<bool> ValidateUser(CustomerDto customerDto)
+        public async Task<bool> ValidateUser(LoginCustomerDto customerDto)
         {
             _customer = await _userManager.FindByNameAsync(customerDto.Email);
             var validPassword = await _userManager.CheckPasswordAsync(_customer, customerDto.Password);

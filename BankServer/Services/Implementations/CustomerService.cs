@@ -19,7 +19,7 @@ namespace BankServer.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<bool> AddCustomerAsync(CustomerDto customerDto)
+        public async Task<bool> AddCustomerAsync(RegisterCustomerDto customerDto)
         {
 
             var accountNumber = GenerateRandomAccountNumber();
@@ -33,7 +33,7 @@ namespace BankServer.Services.Implementations
             return await _customerRepository.addCustomer(customer);
         }
 
-        public async Task<bool> EditCustomerAsync(CustomerDto customerDto)
+        public async Task<bool> EditCustomerAsync(RegisterCustomerDto customerDto)
         {
             var customer = _mapper.Map<Customer>(customerDto);
             customer.PasswordHash = customerDto.Password;

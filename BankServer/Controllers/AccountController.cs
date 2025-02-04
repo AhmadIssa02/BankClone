@@ -31,7 +31,7 @@ namespace BankServer.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register(CustomerDto customerDto)
+        public async Task<IActionResult> Register(RegisterCustomerDto customerDto)
         {
 
             try
@@ -72,7 +72,7 @@ namespace BankServer.Controllers
         }
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] CustomerDto customerDto)
+        public async Task<IActionResult> Login([FromBody] LoginCustomerDto customerDto)
         {
             if (!ModelState.IsValid)
             {

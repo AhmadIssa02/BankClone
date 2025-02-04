@@ -30,7 +30,7 @@ namespace BankServer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCustomer(CustomerDto customerDto)
+        public async Task<IActionResult> AddCustomer(RegisterCustomerDto customerDto)
         {
             if (!IsValidEmail(customerDto.Email))
             {
@@ -46,7 +46,7 @@ namespace BankServer.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> EditCustomer(CustomerDto customerDto)
+        public async Task<IActionResult> EditCustomer(RegisterCustomerDto customerDto)
         {
             var result = await _customerService.EditCustomerAsync(customerDto);
             return Ok(result);

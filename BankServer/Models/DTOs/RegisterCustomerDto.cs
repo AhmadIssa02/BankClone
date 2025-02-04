@@ -1,6 +1,6 @@
 ﻿namespace BankServer.Models.DTOs
 {
-    public class CustomerDto
+    public class RegisterCustomerDto
     {
         public string FirstName{get; set;}
         public string LastName { get; set;}

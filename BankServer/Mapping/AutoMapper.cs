@@ -6,9 +6,9 @@ namespace BankServer.Mapping
     public class AutoMapper : Profile
     {
         public AutoMapper() { 
-            CreateMap<Customer, CustomerDto>();
+            CreateMap<Customer, RegisterCustomerDto>();
             CreateMap<Customer, EditCustomerPasswordDto>();
-            CreateMap<Customer, CustomerDto>().ReverseMap();
+            CreateMap<Customer, RegisterCustomerDto>().ReverseMap();
             CreateMap<Customer, EditCustomerPasswordDto>().ReverseMap();
 
         }
