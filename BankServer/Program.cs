@@ -1,4 +1,7 @@
+using System.Reflection;
 using BankServer.Models;
+using BankServer.Repositories.Implementation;
+using BankServer.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +14,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApiDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+
 
 builder.Services.AddCors(options =>
 {
