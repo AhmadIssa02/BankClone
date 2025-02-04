@@ -21,6 +21,7 @@ namespace BankServer.Services.Implementations
 
         public async Task<bool> AddCustomerAsync(CustomerDto customerDto)
         {
+
             var accountNumber = GenerateRandomAccountNumber();
             var iban = GenerateRandomIBAN(accountNumber);
 
@@ -80,5 +81,6 @@ namespace BankServer.Services.Implementations
             iban += accountNumber.ToString();
             return iban;
         }
+      
     }
 }

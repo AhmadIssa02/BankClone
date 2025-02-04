@@ -1,4 +1,5 @@
-﻿using BankServer.Models.DTOs;
+﻿using BankServer.Models.Domain;
+using BankServer.Models.DTOs;
 using BankServer.Services.Implementations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,7 +32,16 @@ namespace BankServer.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCustomer(CustomerDto customerDto)
         {
+            if (!IsValidEmail(customerDto.Email))
+            {
+                return BadRequest("Invalid Email");
+            }
+
             var result = await _customerService.AddCustomerAsync(customerDto);
+            if(result == false)
+            {
+                return BadRequest("Email already Exists");
+            }
             return Ok(result);
         }
 
@@ -53,6 +63,11 @@ namespace BankServer.Controllers
         {
             var result = await _customerService.ChangePasswordAsync(editCustomerDto);
             return Ok(result);
+        }
+        private bool IsValidEmail(string email)
+        {
+            var emailRegex = new System.Text.RegularExpressions.Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+            return emailRegex.IsMatch(email);
         }
     }
 }

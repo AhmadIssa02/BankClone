@@ -1,9 +1,10 @@
 ﻿using BankServer.Models.Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankServer.Models
 {
-    public class ApiDbContext : DbContext
+    public class ApiDbContext : IdentityDbContext<Customer>
     {
         public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options) { 
         

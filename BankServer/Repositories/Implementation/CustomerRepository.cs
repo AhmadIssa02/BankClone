@@ -18,11 +18,12 @@ namespace BankServer.Repositories.Implementation
 
         public async Task<bool> addCustomer(Customer customer)
         {
-            if (!IsValidEmail(customer.Email))
-            {
-                return false;
-            }
+            var existingCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == customer.Email); 
 
+            if (existingCustomer != null)
+            {
+                return false; 
+            }
             await _context.Customers.AddAsync(customer);
             await _context.SaveChangesAsync();
 
@@ -89,10 +90,6 @@ namespace BankServer.Repositories.Implementation
             return true;
         }
 
-        private bool IsValidEmail(string email)
-        {
-            var emailRegex = new System.Text.RegularExpressions.Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
-            return emailRegex.IsMatch(email);
-        }
+      
     }
 }
