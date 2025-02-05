@@ -6,6 +6,7 @@ using BankServer.Services.Interfaces;
 using BankServer.Models.Domain;
 using BankServer.Models.DTOs;
 using AutoMapper;
+using System.Security.Claims;
 
 
 namespace BankServer.Controllers
@@ -110,6 +111,39 @@ namespace BankServer.Controllers
 
             return Ok(tokenRequest);
         }
+        [HttpPost]
+        [Route("logout")]
+        //send the access token in the headers so we can extract the claims and find the user 
+        public async Task<IActionResult> Logout()
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized("Invalid token");
+                }
+
+                var customer = await _userManager.FindByIdAsync(userId);
+                if (customer == null)
+                {
+                    return Unauthorized("User not found");
+                }
+
+                // Invalidate the refresh token
+                await _userManager.RemoveAuthenticationTokenAsync(customer, "BankServer", "RefreshToken");
+
+                await _userManager.UpdateSecurityStampAsync(customer);
+
+                return Ok("User logged out successfully");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while logging out.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
         private int GenerateRandomAccountNumber()
         {
             var random = new Random();

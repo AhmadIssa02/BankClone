@@ -53,7 +53,10 @@ namespace BankServer.Services.Implementations
             var claims = new List<Claim>
 
        {
-           new Claim(ClaimTypes.Name, _customer.UserName)
+           new Claim(ClaimTypes.Name, _customer.UserName),
+           new Claim(ClaimTypes.NameIdentifier, _customer.Id),
+           new Claim(ClaimTypes.Email, _customer.Email),
+
        };
 
             //var roles = await _userManager.GetRolesAsync(_customer);
@@ -80,7 +83,6 @@ namespace BankServer.Services.Implementations
                 throw new Exception("Secret Key is null or empty.");
             }
 
-            _logger.LogInformation($"Key Length: {key.Length}"); 
             var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);

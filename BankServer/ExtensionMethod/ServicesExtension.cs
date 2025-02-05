@@ -43,7 +43,7 @@ namespace BankServer.Extensions
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = configuration["Jwt:Issuer"],
@@ -72,6 +72,36 @@ namespace BankServer.Extensions
         public static void ConfigureAutoMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        }
+        public static void ConfigureSwagger(this IServiceCollection services)
+        {
+          services.AddSwaggerGen(c =>
+          {
+              c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+              {
+                  Name = "Authorization",
+                  Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+                  In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                  Scheme = "Bearer",
+                  BearerFormat = "JWT",
+                  Description = "Enter JWT Bearer token. Example: 'Bearer {token}'"
+              });
+
+              c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                {
+                    {
+                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                        {
+                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                            {
+                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] { }
+                    }
+                });
+          });
         }
     }
 }
