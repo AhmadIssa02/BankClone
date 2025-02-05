@@ -3,6 +3,7 @@ import 'package:bank_app/Components/balance_card.dart';
 import 'package:bank_app/Components/rewards.dart';
 import 'package:bank_app/Components/services.dart';
 import 'package:bank_app/Components/soon.dart';
+import 'package:bank_app/Modules/Auth/auth_guard.dart';
 import 'package:flutter/material.dart';
 import 'package:bank_app/Modules/Auth/auth_manager.dart';
 import 'package:bank_app/Screens/settings.dart';
@@ -23,6 +24,11 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _loadAccountDetails();
+    _checkAuth();
+  }
+
+  Future<void> _checkAuth() async {
+    await authGuard(context);
   }
 
   Future<void> _loadAccountDetails() async {

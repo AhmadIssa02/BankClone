@@ -19,7 +19,6 @@ class CustomerDataSource {
         },
       );
 
-      print('Response body: ${response.body}');
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         final jsonData = jsonDecode(response.body);
         return Customer.fromJson(jsonData);
