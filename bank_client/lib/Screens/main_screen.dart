@@ -3,10 +3,10 @@ import 'package:bank_app/Components/balance_card.dart';
 import 'package:bank_app/Components/rewards.dart';
 import 'package:bank_app/Components/services.dart';
 import 'package:bank_app/Components/soon.dart';
+import 'package:flutter/material.dart';
 import 'package:bank_app/Modules/Auth/auth_manager.dart';
 import 'package:bank_app/Screens/settings.dart';
 import 'package:bank_app/Screens/soon_screen.dart';
-import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -17,13 +17,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   String _selectedTab = 'Accounts';
-
-  void _onTabSelected(String tab) {
-    setState(() {
-      _selectedTab = tab;
-    });
-  }
-
   String? name;
 
   @override
@@ -39,10 +32,17 @@ class _MainScreenState extends State<MainScreen> {
           await authManager.decodeJwtToken(context);
       setState(() {
         name = decodedToken['username'];
+        name = name!.toUpperCase();
       });
     } catch (e) {
       authManager.handleInvalidToken(context);
     }
+  }
+
+  void _onTabSelected(String tab) {
+    setState(() {
+      _selectedTab = tab;
+    });
   }
 
   @override
@@ -57,9 +57,7 @@ class _MainScreenState extends State<MainScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    width: 10,
-                  ),
+                  const SizedBox(width: 10),
                   Center(
                     child: InkWell(
                       onTap: () {
@@ -102,9 +100,7 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 15,
-                  ),
+                  const SizedBox(width: 15),
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0),
                     child: Column(
@@ -130,9 +126,7 @@ class _MainScreenState extends State<MainScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    width: 20,
-                  ),
+                  const SizedBox(width: 20),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(right: 28, top: 12),
@@ -168,9 +162,7 @@ class _MainScreenState extends State<MainScreen> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        const SizedBox(
-                          width: 15,
-                        ),
+                        const SizedBox(width: 15),
                         _buildTab('Accounts'),
                         _buildTab('Cards'),
                         _buildTab('Loans'),

@@ -21,7 +21,13 @@ namespace BankServer.Controllers
         [HttpGet("{email}")]
         public async Task<IActionResult> GetCustomerByEmail(string email)
         {
-            var result = await _customerService.GetCustomerByEmailAsync(email);
+            Customer result = await _customerService.GetCustomerByEmailAsync(email);
+            if (result == null)
+            {
+                Console.WriteLine("null");
+                return NotFound("Customer not found");
+            }
+            Console.WriteLine("result is here:" + result);
             return Ok(result);
         }
         [HttpGet("getAll")]

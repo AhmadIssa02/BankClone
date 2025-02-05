@@ -1,4 +1,6 @@
 import 'package:bank_app/Modules/Auth/auth_manager.dart';
+import 'package:bank_app/Modules/Customer/customer_model.dart';
+import 'package:bank_app/Modules/Customer/customer_repository.dart';
 import 'package:bank_app/Screens/landing_screen.dart';
 import 'package:bank_app/Screens/soon_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   String? email;
   String? name;
+  String? accNum;
+  Customer? customer;
 
   Future<void> _loadAccountDetails() async {
     AuthManager authManager = AuthManager();
@@ -29,9 +33,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
       setState(() {
         email = decodedToken['email'];
         name = decodedToken['username'];
+        name = name!.toUpperCase();
       });
+      _getCustomerByEmail();
     } else {
       authManager.handleInvalidToken(context);
+    }
+  }
+
+  Future<void> _getCustomerByEmail() async {
+    if (email != null) {
+      try {
+        CustomerRepository customerRepository = CustomerRepository();
+        Customer? customerData =
+            await customerRepository.getCustomerByEmail(email!);
+        setState(() {
+          customer = customerData;
+          accNum = customerData!.accountNumber.toString();
+        });
+      } catch (e) {
+        print("Error fetching customer data: $e");
+      }
     }
   }
 
@@ -162,7 +184,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "123456789",
+                            accNum ?? "invalid",
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
@@ -180,8 +202,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             ),
                             onTap: () {
-                              Clipboard.setData(
-                                  const ClipboardData(text: "123456789"));
+                              Clipboard.setData(ClipboardData(
+                                  text: "Account number: $accNum"));
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content:

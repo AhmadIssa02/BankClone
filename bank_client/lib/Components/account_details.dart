@@ -1,4 +1,6 @@
 import 'package:bank_app/Modules/Auth/auth_manager.dart';
+import 'package:bank_app/Modules/Customer/customer_model.dart';
+import 'package:bank_app/Modules/Customer/customer_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -16,6 +18,8 @@ class _AccountDetailsState extends State<AccountDetails> {
   String? IBAN;
   String? accNum;
   String? dateOpened;
+  String? email;
+  Customer? customer;
 
   @override
   void initState() {
@@ -31,9 +35,28 @@ class _AccountDetailsState extends State<AccountDetails> {
       setState(() {
         name = decodedToken['username'];
         dateOpened = _formatDate(decodedToken["dateOpened"]);
+        email = decodedToken["email"];
       });
+      _getCustomerByEmail();
     } else {
       authManager.handleInvalidToken(context);
+    }
+  }
+
+  Future<void> _getCustomerByEmail() async {
+    if (email != null) {
+      try {
+        CustomerRepository customerRepository = CustomerRepository();
+        Customer? customerData =
+            await customerRepository.getCustomerByEmail(email!);
+        setState(() {
+          customer = customerData;
+          IBAN = customerData!.iban;
+          accNum = customerData!.accountNumber.toString();
+        });
+      } catch (e) {
+        print("Error fetching customer data: $e");
+      }
     }
   }
 
