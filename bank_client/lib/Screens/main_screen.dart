@@ -1,8 +1,8 @@
-import 'package:bank_app/Modules/Components/account_details.dart';
-import 'package:bank_app/Modules/Components/balance_card.dart';
-import 'package:bank_app/Modules/Components/rewards.dart';
-import 'package:bank_app/Modules/Components/services.dart';
-import 'package:bank_app/Modules/Components/soon.dart';
+import 'package:bank_app/Components/account_details.dart';
+import 'package:bank_app/Components/balance_card.dart';
+import 'package:bank_app/Components/rewards.dart';
+import 'package:bank_app/Components/services.dart';
+import 'package:bank_app/Components/soon.dart';
 import 'package:bank_app/Screens/settings.dart';
 import 'package:bank_app/Screens/soon_screen.dart';
 import 'package:flutter/material.dart';

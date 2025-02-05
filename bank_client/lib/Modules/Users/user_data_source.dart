@@ -1,7 +1,7 @@
 import 'dart:convert';
 // import 'dart:io';
 
-import 'package:bank_app/Modules/user_model.dart';
+import 'package:bank_app/Modules/Users/user_model.dart';
 import 'package:http/http.dart' as http;
 
 class UserDataSource {

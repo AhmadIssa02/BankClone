@@ -1,6 +1,6 @@
-import 'package:bank_app/Modules/user_data_source.dart';
-import 'package:bank_app/Modules/user_model.dart';
-import 'package:bank_app/Modules/user_repository.dart';
+import 'package:bank_app/Modules/Users/user_data_source.dart';
+import 'package:bank_app/Modules/Users/user_model.dart';
+import 'package:bank_app/Modules/Users/user_repository.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -11,13 +11,11 @@ class MainPage extends StatefulWidget {
 }
 
 class MainPageState extends State<MainPage> {
-  late UserDataSource userDataSource;
   late UserRepository userRepository;
   late List<User> data;
 
   void initData() {
-    userDataSource = UserDataSource();
-    userRepository = UserRepository(dataSource: userDataSource);
+    userRepository = UserRepository();
     data = [];
   }
 

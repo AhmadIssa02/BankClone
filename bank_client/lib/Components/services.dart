@@ -1,4 +1,4 @@
-import 'package:bank_app/Modules/Components/service.dart';
+import 'package:bank_app/Components/service.dart';
 import 'package:bank_app/Modules/data/services_data.dart';
 import 'package:flutter/material.dart';
 

@@ -1,4 +1,4 @@
-import 'package:bank_app/Modules/Components/soon.dart';
+import 'package:bank_app/Components/soon.dart';
 import 'package:flutter/material.dart';
 
 class SoonScreen extends StatelessWidget {
