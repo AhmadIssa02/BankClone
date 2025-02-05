@@ -1,6 +1,9 @@
-// ignore_for_file: avoid_print
+// lib/screens/register_screen.dart
 
+import 'package:bank_app/Screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:bank_app/Modules/Account/models/register_model.dart';
+import 'package:bank_app/Modules/Account/account_repository.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -13,10 +16,19 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-
+  String? _firstName;
+  String? _lastName;
   String? _email;
   String? _password;
   String? _confirmPassword;
+
+  void saveFirstName(String firstName) {
+    _firstName = firstName;
+  }
+
+  void saveLastName(String lastName) {
+    _lastName = lastName;
+  }
 
   void saveEmail(String email) {
     _email = email;
@@ -30,10 +42,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _confirmPassword = confirmPassword;
   }
 
-  void submit() {
-    print(_email);
-    print(_password);
-    print(_confirmPassword);
+  void submit() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      final registerModel = RegisterModel(
+        firstName: _firstName!,
+        lastName: _lastName!,
+        email: _email!,
+        password: _password!,
+        confirmPassword: _confirmPassword!,
+      );
+
+      final repository = AccountRepository();
+      bool result = await repository.registerAccount(registerModel);
+
+      if (result) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Account registered successfully!')),
+        );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to register account')),
+        );
+      }
+    }
   }
 
   @override
@@ -73,6 +109,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     key: _formKey,
                     child: Column(
                       children: [
+                        TextFormField(
+                          onChanged: saveFirstName,
+                          keyboardType: TextInputType.name,
+                          decoration: InputDecoration(
+                            labelText: 'First Name',
+                            prefixIcon: const Icon(Icons.account_box_rounded),
+                            enabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        TextFormField(
+                          onChanged: saveLastName,
+                          keyboardType: TextInputType.name,
+                          decoration: InputDecoration(
+                            labelText: 'Last Name',
+                            prefixIcon: const Icon(Icons.account_box_rounded),
+                            enabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
                         TextFormField(
                           onChanged: saveEmail,
                           keyboardType: TextInputType.emailAddress,
@@ -162,14 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 20.0, right: 1.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
-                      );
-                      submit();
-                    }
-                  },
+                  onPressed: submit,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         vertical: 20, horizontal: 20),

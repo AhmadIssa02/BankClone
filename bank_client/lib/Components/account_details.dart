@@ -1,8 +1,55 @@
+import 'package:bank_app/Modules/Auth/auth_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:intl/intl.dart'; // Import the intl package
 
-class AccountDetails extends StatelessWidget {
+class AccountDetails extends StatefulWidget {
   const AccountDetails({super.key});
+
+  @override
+  _AccountDetailsState createState() => _AccountDetailsState();
+}
+
+class _AccountDetailsState extends State<AccountDetails> {
+  String? name;
+  String? IBAN;
+  String? accNum;
+  String? dateOpened;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAccountDetails();
+  }
+
+  Future<void> _loadAccountDetails() async {
+    AuthManager authManager = AuthManager();
+    String? token = await authManager.getAccessToken();
+    if (token != null && !JwtDecoder.isExpired(token)) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      setState(() {
+        name = decodedToken['username'];
+        dateOpened = _formatDate(decodedToken["dateOpened"]);
+      });
+    } else {
+      authManager.handleInvalidToken(context);
+    }
+  }
+
+  String _formatDate(String? dateTimeString) {
+    if (dateTimeString == null) return "N/A";
+
+    try {
+      DateFormat inputFormat = DateFormat("M/d/yyyy h:mm:ss a");
+      DateTime dateTime = inputFormat.parse(dateTimeString);
+      DateFormat outputFormat = DateFormat('MM/dd/yyyy');
+      return outputFormat.format(dateTime);
+    } catch (e) {
+      print("Error parsing date: $e");
+      return "Invalid date";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +90,10 @@ class AccountDetails extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildAccountDetailRow("Name on Account", "Ahmad Issa"),
-              _buildAccountDetailRow("IBAN", "GB29XABC10161234567801"),
-              _buildAccountDetailRow("Account Number", "1234567890"),
-              _buildAccountDetailRow("Date Opened", "01/01/2020"),
+              _buildAccountDetailRow("Name on Account", name ?? "Loading..."),
+              _buildAccountDetailRow("IBAN", IBAN ?? "Loading..."),
+              _buildAccountDetailRow("Account Number", accNum ?? "Loading..."),
+              _buildAccountDetailRow("Date Opened", dateOpened ?? "Loading..."),
               Center(
                 child: TextButton(
                   onPressed: () {
@@ -66,7 +113,7 @@ class AccountDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildAccountDetailRow(String title, String value) {
+  Widget _buildAccountDetailRow(String title, String? value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -81,7 +128,7 @@ class AccountDetails extends StatelessWidget {
             ),
           ),
           Text(
-            value,
+            value ?? '',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -96,10 +143,10 @@ class AccountDetails extends StatelessWidget {
   void _copyAccountDetailsToClipboard(BuildContext context) {
     String accountDetails = '''
     Account Details:
-    Name on Account: Ahmad Issa
-    IBAN: GB29XABC10161234567801
-    Account Number: 1234567890
-    Date Opened: 01/01/2020
+    Name on Account: ${name ?? ""}
+    IBAN: ${IBAN ?? ""}
+    Account Number: ${accNum ?? ""}
+    Date Opened: ${dateOpened ?? ""}
     ''';
 
     Clipboard.setData(ClipboardData(text: accountDetails));

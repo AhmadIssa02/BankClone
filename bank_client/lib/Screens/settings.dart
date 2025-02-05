@@ -1,10 +1,39 @@
+import 'package:bank_app/Modules/Auth/auth_manager.dart';
 import 'package:bank_app/Screens/landing_screen.dart';
 import 'package:bank_app/Screens/soon_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  void initState() {
+    super.initState();
+    _loadAccountDetails();
+  }
+
+  String? email;
+  String? name;
+
+  Future<void> _loadAccountDetails() async {
+    AuthManager authManager = AuthManager();
+    String? token = await authManager.getAccessToken();
+    if (token != null && !JwtDecoder.isExpired(token)) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      setState(() {
+        email = decodedToken['email'];
+        name = decodedToken['username'];
+      });
+    } else {
+      authManager.handleInvalidToken(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +98,7 @@ class SettingsScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 2, bottom: 2),
                         child: Text(
-                          'AHMAD ISSA',
+                          name ?? "invalid",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w900,
@@ -177,7 +206,7 @@ class SettingsScreen extends StatelessWidget {
                         ),
                       ),
                       trailing: Text(
-                        "ahmad@gmail.com",
+                        email ?? "Loading",
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -248,10 +277,18 @@ class SettingsScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(
                     right: 15, left: 15, bottom: 50, top: 10),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    AuthManager().removeAccessToken(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LandingScreen(),
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    padding: const EdgeInsets.symmetric(vertical: 18),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                       side: const BorderSide(
@@ -260,22 +297,12 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LandingScreen(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Logout',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).primaryColor,
-                      ),
+                  child: Text(
+                    'Logout',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 ),

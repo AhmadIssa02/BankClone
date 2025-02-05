@@ -50,12 +50,15 @@ namespace BankServer.Services.Implementations
         }
         private async Task<List<Claim>> GetClaims()
         {
+            var username = _customer.FirstName + _customer.LastName;
             var claims = new List<Claim>
 
        {
            new Claim(ClaimTypes.Name, _customer.UserName),
-           new Claim(ClaimTypes.NameIdentifier, _customer.Id),
-           new Claim(ClaimTypes.Email, _customer.Email),
+           new Claim("id", _customer.Id),
+           new Claim("email", _customer.Email),
+           new Claim("username", username),
+           new Claim("dateOpened", _customer.DateCreated.ToString()),
 
        };
 

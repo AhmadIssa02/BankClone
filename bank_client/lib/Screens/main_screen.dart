@@ -3,6 +3,7 @@ import 'package:bank_app/Components/balance_card.dart';
 import 'package:bank_app/Components/rewards.dart';
 import 'package:bank_app/Components/services.dart';
 import 'package:bank_app/Components/soon.dart';
+import 'package:bank_app/Modules/Auth/auth_manager.dart';
 import 'package:bank_app/Screens/settings.dart';
 import 'package:bank_app/Screens/soon_screen.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,27 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _selectedTab = tab;
     });
+  }
+
+  String? name;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAccountDetails();
+  }
+
+  Future<void> _loadAccountDetails() async {
+    AuthManager authManager = AuthManager();
+    try {
+      Map<String, dynamic> decodedToken =
+          await authManager.decodeJwtToken(context);
+      setState(() {
+        name = decodedToken['username'];
+      });
+    } catch (e) {
+      authManager.handleInvalidToken(context);
+    }
   }
 
   @override
@@ -98,7 +120,7 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                         ),
                         Text(
-                          'AHMAD ISSA',
+                          name ?? "invalid",
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontSize: 17,

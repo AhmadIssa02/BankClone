@@ -13,7 +13,7 @@ class MainPage extends StatefulWidget {
 class MainPageState extends State<MainPage> {
   late UserRepository userRepository;
   late List<User> data;
-
+  
   void initData() {
     userRepository = UserRepository();
     data = [];

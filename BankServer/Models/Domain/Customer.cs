@@ -9,6 +9,9 @@ namespace BankServer.Models.Domain
         public string LastName { get; set; }
         public string IBAN { get; set; }
         public int AccountNumber { get; set; }
-     
+
+        [Required]
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+
     }
 }

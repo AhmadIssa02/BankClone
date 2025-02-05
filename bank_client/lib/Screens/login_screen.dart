@@ -1,9 +1,14 @@
 // ignore_for_file: avoid_print
 
+import 'package:bank_app/Modules/Account/account_data_source.dart';
+import 'package:bank_app/Modules/Account/account_repository.dart';
+import 'package:bank_app/Modules/Account/models/login_model.dart';
 import 'package:bank_app/Screens/landing_screen.dart';
 import 'package:bank_app/Screens/main_screen.dart';
 import 'package:bank_app/Screens/register_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../Modules/Auth/auth_manager.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,15 +34,29 @@ class _LoginScreenState extends State<LoginScreen> {
     _password = password;
   }
 
-  void submit() {
-    print(_email);
-    print(_password);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const MainScreen(),
-      ),
-    );
+  void submit() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      final loginModel = LoginModel(email: _email!, password: _password!);
+
+      final repository = AccountRepository();
+      LoginResultDto? result = await repository.login(loginModel);
+      if (result != null) {
+        await AuthManager().saveAccessToken(result.token);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login successfully!')),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MainScreen(),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to Login')),
+        );
+      }
+    }
   }
 
   @override
