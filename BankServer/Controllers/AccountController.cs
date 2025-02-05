@@ -33,6 +33,10 @@ namespace BankServer.Controllers
         [Route("Register")]
         public async Task<IActionResult> Register(RegisterCustomerDto customerDto)
         {
+            if (!IsValidEmail(customerDto.Email))
+            {
+                return BadRequest("Invalid Email");
+            }
 
             try
             {
@@ -119,6 +123,11 @@ namespace BankServer.Controllers
             var iban = "JO" + random.Next(10, 99).ToString() + "EFBK" + random.Next(100000000, 999999999).ToString();
             iban += accountNumber.ToString();
             return iban;
+        }
+        private bool IsValidEmail(string email)
+        {
+            var emailRegex = new System.Text.RegularExpressions.Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+            return emailRegex.IsMatch(email);
         }
     }
 }
