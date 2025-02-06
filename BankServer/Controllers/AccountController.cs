@@ -144,6 +144,54 @@ namespace BankServer.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("changePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+            
+                var customer = await _userManager.FindByEmailAsync(changePasswordDto.Email);
+                if (customer == null)
+                {
+                    return Unauthorized("User not found");
+                }
+                // Validate the old password
+                var isPasswordValid = await _userManager.CheckPasswordAsync(customer, changePasswordDto.OldPassword);
+                if (!isPasswordValid)
+                {
+                    return BadRequest("Old password is incorrect");
+                }
+
+                // Change the password
+                var result = await _userManager.ChangePasswordAsync(customer, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
+
+                if (result.Succeeded)
+                {
+                    return Ok("Password changed successfully");
+                }
+
+                // If there were errors
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while changing the password.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+
         private int GenerateRandomAccountNumber()
         {
             var random = new Random();

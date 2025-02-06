@@ -14,4 +14,8 @@ class AccountRepository {
   Future<LoginResultDto?> login(LoginModel loginModel) async {
     return await dataSource.login(loginModel);
   }
+
+  Future<bool?> changePassword(String oldPassword, String newPassword) async {
+    return await dataSource.changePassword(oldPassword, newPassword);
+  }
 }

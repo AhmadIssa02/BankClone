@@ -8,19 +8,16 @@ import 'package:bank_app/Screens/login_screen.dart';
 class AuthManager {
   static const String _tokenKey = 'access_token';
 
-  // Save the access token in local storage
   Future<void> saveAccessToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_tokenKey, token);
   }
 
-  // Get the access token from local storage
   Future<String?> getAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_tokenKey);
   }
 
-  // Check if the token is valid
   Future<bool> isTokenValid() async {
     final token = await getAccessToken();
 
@@ -46,7 +43,6 @@ class AuthManager {
     );
   }
 
-  // Redirect to login if the token is invalid
   Future<void> handleInvalidToken(BuildContext context) async {
     await removeAccessToken(context);
     ScaffoldMessenger.of(context).showSnackBar(

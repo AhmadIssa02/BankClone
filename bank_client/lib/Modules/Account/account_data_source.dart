@@ -4,8 +4,10 @@
 
 import 'dart:convert';
 import 'package:bank_app/Modules/Account/models/login_model.dart';
+import 'package:bank_app/Modules/Auth/auth_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:bank_app/Modules/Account/models/register_model.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class LoginResultDto {
   final String token;
@@ -74,6 +76,43 @@ class AccountDataSource {
     } catch (e) {
       print('Error during logging in: $e');
       return null;
+    }
+  }
+
+  Future<bool> changePassword(String oldPassword, String newPassword) async {
+    final token = await AuthManager().getAccessToken();
+
+    final decodedToken = JwtDecoder.decode(token!);
+    final email = decodedToken['email'];
+
+    final body = jsonEncode({
+      'email': email,
+      'oldPassword': oldPassword,
+      'newPassword': newPassword,
+      'confirmNewPassword': newPassword,
+    });
+
+    final uri = Uri.parse('$baseUri/changePassword');
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          "Content-Type": "application/json; charset=UTF-8",
+          "Authorization": "Bearer $token",
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        print('Password changed successfully');
+        return true;
+      } else {
+        print('Failed to change password: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      print('Error changing password: $e');
+      return false;
     }
   }
 }

@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:bank_app/Modules/Customer/customer_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:bank_app/Modules/Auth/auth_manager.dart'; // Import AuthManager
+import 'package:bank_app/Modules/Auth/auth_manager.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class CustomerDataSource {
   final String baseUri = "https://localhost:7280/api/Customer";

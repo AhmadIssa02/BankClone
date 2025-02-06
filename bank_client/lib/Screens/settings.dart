@@ -1,6 +1,7 @@
 import 'package:bank_app/Modules/Auth/auth_manager.dart';
 import 'package:bank_app/Modules/Customer/customer_model.dart';
 import 'package:bank_app/Modules/Customer/customer_repository.dart';
+import 'package:bank_app/Screens/change_password_screen.dart';
 import 'package:bank_app/Screens/landing_screen.dart';
 import 'package:bank_app/Screens/soon_screen.dart';
 import 'package:flutter/material.dart';
@@ -273,11 +274,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               context,
               title: 'Security Settings',
               children: [
-                _buildRowItem(
-                  context,
-                  'Change Password',
-                  icon: Icons.lock,
-                ),
+                _buildRowItem(context, 'Change Password',
+                    icon: Icons.lock, screen: const ChangePasswordScreen()),
               ],
             ),
             const SizedBox(height: 20),
@@ -389,6 +387,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     BuildContext context,
     String title, {
     IconData? icon,
+    Widget? screen,
   }) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
@@ -412,7 +411,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const SoonScreen(),
+              builder: (context) => screen ?? const SoonScreen(),
             ),
           );
         },

@@ -42,6 +42,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _confirmPassword = confirmPassword;
   }
 
+  String? passwordValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your password';
+    }
+
+    if (value.length < 6) {
+      return 'Password must be at least 6 characters';
+    }
+
+    String passwordPattern =
+        r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$';
+    RegExp regExp = RegExp(passwordPattern);
+
+    if (!regExp.hasMatch(value)) {
+      return 'Password must contain numbers, uppercase letters, and special characters';
+    }
+
+    return null;
+  }
+
+  String? confirmPasswordValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please confirm your password';
+    }
+
+    if (_password != _confirmPassword) {
+      return 'Passwords do not match';
+    }
+
+    return null;
+  }
+
   void submit() async {
     if (_formKey.currentState?.validate() ?? false) {
       final registerModel = RegisterModel(
@@ -123,6 +155,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   color: Theme.of(context).primaryColor),
                             ),
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your first name';
+                            }
+                          },
                         ),
                         const SizedBox(height: 30),
                         TextFormField(
@@ -139,6 +176,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   color: Theme.of(context).primaryColor),
                             ),
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your last name';
+                            }
+                          },
                         ),
                         const SizedBox(height: 30),
                         TextFormField(
@@ -183,15 +225,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   color: Theme.of(context).primaryColor),
                             ),
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
-                            }
-                            if (value.length < 6) {
-                              return 'Password must be at least 6 characters';
-                            }
-                            return null;
-                          },
+                          validator: passwordValidator,
                         ),
                         const SizedBox(height: 30),
                         TextFormField(
@@ -208,15 +242,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   color: Theme.of(context).primaryColor),
                             ),
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please confirm your password';
-                            }
-                            if (_password != _confirmPassword) {
-                              return 'Passwords do not match';
-                            }
-                            return null;
-                          },
+                          validator: confirmPasswordValidator,
                         ),
                         const SizedBox(height: 30),
                       ],
