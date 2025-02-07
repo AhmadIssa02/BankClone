@@ -1,12 +1,15 @@
 // lib/Modules/Account/auth_manager.dart
 
+import 'package:bank_app/Screens/landing_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bank_app/Screens/login_screen.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthManager {
   static const String _tokenKey = 'access_token';
+  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
   Future<void> saveAccessToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
@@ -37,9 +40,9 @@ class AuthManager {
   Future<void> removeAccessToken(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_tokenKey);
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
+      MaterialPageRoute(builder: (context) => const LandingScreen()),
     );
   }
 
@@ -59,5 +62,13 @@ class AuthManager {
       handleInvalidToken(context);
       throw Exception("Invalid Token");
     }
+  }
+
+  Future<void> saveEncryptionKey(String key) async {
+    await secureStorage.write(key: "encryption_key", value: key);
+  }
+
+  Future<String?> getEncryptionKey() async {
+    return await secureStorage.read(key: "encryption_key");
   }
 }

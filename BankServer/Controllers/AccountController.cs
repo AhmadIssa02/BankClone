@@ -41,12 +41,21 @@ namespace BankServer.Controllers
 
             try
             {
-
-
                 if (!ModelState.IsValid)
                 {
-                    BadRequest(ModelState);
+                    return BadRequest(ModelState);
                 }
+
+                string decryptedPassword;
+                try
+                {
+                    decryptedPassword = EncryptionHelper.Decrypt(customerDto.Password);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Invalid encrypted password format.");
+                }
+
                 var accountNumber = GenerateRandomAccountNumber();
                 var iban = GenerateRandomIBAN(accountNumber);
 
@@ -54,11 +63,11 @@ namespace BankServer.Controllers
                 customer.AccountNumber = accountNumber;
                 customer.IBAN = iban;
                 customer.UserName = customerDto.Email;
-                var result = await _userManager.CreateAsync(customer, customerDto.Password);
+
+                var result = await _userManager.CreateAsync(customer, decryptedPassword);
 
                 if (!result.Succeeded)
                 {
-
                     foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
@@ -66,15 +75,15 @@ namespace BankServer.Controllers
 
                     return BadRequest(ModelState);
                 }
-                //await _userManager.AddToRolesAsync(user, registerDto.Roles);
+
                 return Accepted();
             }
             catch (Exception ex)
             {
                 return Problem(ex.Message, statusCode: 500);
             }
-
         }
+
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginCustomerDto customerDto)
@@ -86,6 +95,16 @@ namespace BankServer.Controllers
 
             try
             {
+                string decryptedPassword;
+                try
+                {
+                    decryptedPassword = EncryptionHelper.Decrypt(customerDto.Password);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Invalid encrypted password format.");
+                }
+                customerDto.Password = decryptedPassword;
                 if (!await _authManager.ValidateUser(customerDto))
                 {
                     return Unauthorized();

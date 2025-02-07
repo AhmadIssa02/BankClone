@@ -50,7 +50,7 @@ namespace BankServer.Services.Implementations
         }
         private async Task<List<Claim>> GetClaims()
         {
-            var username = _customer.FirstName + _customer.LastName;
+            var username = _customer.FirstName + " " + _customer.LastName;
             var claims = new List<Claim>
 
        {

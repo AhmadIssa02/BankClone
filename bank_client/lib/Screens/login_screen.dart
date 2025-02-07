@@ -36,7 +36,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void submit() async {
     if (_formKey.currentState?.validate() ?? false) {
-      final loginModel = LoginModel(email: _email!, password: _password!);
+      final loginModel =
+          await LoginModel.fromPlainText(email: _email!, password: _password!);
 
       final repository = AccountRepository();
       LoginResultDto? result = await repository.login(loginModel);

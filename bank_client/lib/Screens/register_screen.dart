@@ -76,12 +76,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void submit() async {
     if (_formKey.currentState?.validate() ?? false) {
-      final registerModel = RegisterModel(
+      final registerModel = await RegisterModel.fromPlainText(
         firstName: _firstName!,
         lastName: _lastName!,
         email: _email!,
         password: _password!,
-        confirmPassword: _confirmPassword!,
       );
 
       final repository = AccountRepository();
