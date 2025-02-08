@@ -21,15 +21,16 @@ namespace BankServer.Controllers
         //private readonly SignInManager<APIUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
         private readonly IAuthManager _authManager;
-        public AccountController(UserManager<Customer> userManager, ILogger<AccountController> logger, IAuthManager authManager, IMapper mapper)
+        private readonly AccountBalanceController _accountBalanceController;
+
+        public AccountController(UserManager<Customer> userManager, ILogger<AccountController> logger, IAuthManager authManager, IMapper mapper, AccountBalanceController accountBalanceController)
         {
             _userManager = userManager;
             _mapper = mapper;
-            //_signInManager = signInManager;
             _logger = logger;
             _authManager = authManager;
+            _accountBalanceController = accountBalanceController;  
         }
-
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register(RegisterCustomerDto customerDto)
@@ -74,6 +75,18 @@ namespace BankServer.Controllers
                     }
 
                     return BadRequest(ModelState);
+                }
+                var accountBalanceDto = new AccountBalanceDto
+                {
+                    CustomerId = customer.Id,
+                    Balance = 0  // You can initialize the balance to 0 or any other value
+                };
+
+                var createAccountBalanceResult = await _accountBalanceController.CreateAccountBalance(accountBalanceDto);
+
+                if (createAccountBalanceResult is BadRequestObjectResult)
+                {
+                    return BadRequest("Failed to create account balance.");
                 }
 
                 return Accepted();

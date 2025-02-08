@@ -3,6 +3,7 @@ using System;
 using BankServer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankServer.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250208152946_TransactionsAndAccountBalance")]
+    partial class TransactionsAndAccountBalance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.12");
@@ -32,8 +35,7 @@ namespace BankServer.Migrations
 
                     b.HasKey("AccountBalanceId");
 
-                    b.HasIndex("CustomerId")
-                        .IsUnique();
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("AccountBalances");
                 });
@@ -45,9 +47,6 @@ namespace BankServer.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CustomerId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -66,8 +65,6 @@ namespace BankServer.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("TransactionId");
-
-                    b.HasIndex("CustomerId");
 
                     b.HasIndex("ReceiverCustomerId");
 
@@ -311,8 +308,8 @@ namespace BankServer.Migrations
             modelBuilder.Entity("BankServer.Models.Domain.BankServer.Models.Domain.AccountBalance", b =>
                 {
                     b.HasOne("BankServer.Models.Domain.Customer", "Customer")
-                        .WithOne("AccountBalance")
-                        .HasForeignKey("BankServer.Models.Domain.BankServer.Models.Domain.AccountBalance", "CustomerId")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -321,20 +318,16 @@ namespace BankServer.Migrations
 
             modelBuilder.Entity("BankServer.Models.Domain.BankServer.Models.Domain.Transaction", b =>
                 {
-                    b.HasOne("BankServer.Models.Domain.Customer", null)
-                        .WithMany("Transactions")
-                        .HasForeignKey("CustomerId");
-
                     b.HasOne("BankServer.Models.Domain.Customer", "Receiver")
                         .WithMany()
                         .HasForeignKey("ReceiverCustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BankServer.Models.Domain.Customer", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderCustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Receiver");
@@ -391,14 +384,6 @@ namespace BankServer.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("BankServer.Models.Domain.Customer", b =>
-                {
-                    b.Navigation("AccountBalance")
-                        .IsRequired();
-
-                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }

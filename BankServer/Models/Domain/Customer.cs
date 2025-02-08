@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using BankServer.Models.Domain.BankServer.Models.Domain;
 using Microsoft.AspNetCore.Identity;
 
 namespace BankServer.Models.Domain
@@ -12,6 +13,8 @@ namespace BankServer.Models.Domain
 
         [Required]
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
-
+        public virtual AccountBalance AccountBalance { get; set; }  
+        public virtual ICollection<Transaction> Transactions { get; set; }  
     }
+
 }

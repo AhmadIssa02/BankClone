@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BankServer.Controllers;
 using BankServer.Models;
 using BankServer.Models.Domain;
 using BankServer.Repositories.Implementation;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
+using static BankServer.Repositories.Interfaces.IGenericRepository;
 
 namespace BankServer.Extensions
 {
@@ -57,6 +59,10 @@ namespace BankServer.Extensions
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IAuthManager, AuthManager>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<AccountBalanceController>();
+            //services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            //services.AddScoped<IGenericRepository, GenericRepository>();
         }
 
         public static void ConfigureCors(this IServiceCollection services)
