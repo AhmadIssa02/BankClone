@@ -41,6 +41,7 @@ class AccountDataSource {
         uri,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'credentials': 'include',
         },
         body: jsonEncode(registerModel.toJson()),
       );
@@ -64,6 +65,7 @@ class AccountDataSource {
         uri,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'credentials': 'include',
         },
         body: jsonEncode(loginModel.toJson()),
       );
@@ -99,6 +101,7 @@ class AccountDataSource {
         headers: <String, String>{
           "Content-Type": "application/json; charset=UTF-8",
           "Authorization": "Bearer $token",
+          'credentials': 'include',
         },
         body: body,
       );

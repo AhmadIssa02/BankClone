@@ -63,12 +63,16 @@ namespace BankServer.Extensions
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAllOrigins", builder =>
+                options.AddPolicy("AllowFrontendOnly", builder =>
                 {
-                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    builder.WithOrigins("http://localhost:8080")
+                           .AllowAnyMethod()  
+                           .AllowAnyHeader()
+                           .AllowCredentials(); 
                 });
             });
         }
+
         public static void ConfigureAutoMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());

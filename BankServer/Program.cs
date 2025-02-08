@@ -26,8 +26,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("AllowFrontendOnly");
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';");
+    await next();
+});
 
-app.UseCors("AllowAllOrigins");
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

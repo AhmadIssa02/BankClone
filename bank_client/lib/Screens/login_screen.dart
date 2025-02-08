@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to Login')),
+          const SnackBar(content: Text('Your email or password are incorrect')),
         );
       }
     }
