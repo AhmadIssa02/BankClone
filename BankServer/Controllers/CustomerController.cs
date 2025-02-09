@@ -17,6 +17,16 @@ namespace BankServer.Controllers
         {
             _customerService = customerService;
         }
+        [HttpGet("getByAccountNumber/{accountNumber}")]
+        public async Task<IActionResult> GetCustomerByAccountNumber(int accountNumber)
+        {
+            var customer = await _customerService.GetCustomerByAccountNumberAsync(accountNumber);
+            if (customer == null)
+            {
+                return NotFound("Customer not found");
+            }
+            return Ok(customer);
+        }
 
         [HttpGet("{email}")]
         public async Task<IActionResult> GetCustomerByEmail(string email)

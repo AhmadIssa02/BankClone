@@ -25,7 +25,7 @@
             [Required]
             public DateTime TransactionDate { get; set; }
 
-            public string Description { get; set; }
+            public string? Description { get; set; }
 
             public virtual Customer Sender { get; set; }
             public virtual Customer Receiver { get; set; }

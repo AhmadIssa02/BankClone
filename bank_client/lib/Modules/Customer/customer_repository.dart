@@ -4,8 +4,13 @@ import 'package:bank_app/Modules/Customer/customer_model.dart';
 class CustomerRepository {
   final CustomerDataSource dataSource = CustomerDataSource();
 
+  // Get customer by email
   Future<Customer?> getCustomerByEmail(String email) async {
-    final customer = await dataSource.getCustomerByEmail(email);
-    return customer;
+    return await dataSource.getCustomerByEmail(email);
+  }
+
+  // Get customer by account number
+  Future<Customer?> getCustomerByAccountNumber(int accountNumber) async {
+    return await dataSource.getCustomerByAccountNumber(accountNumber);
   }
 }

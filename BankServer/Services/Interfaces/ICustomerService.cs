@@ -3,6 +3,8 @@ using BankServer.Models.DTOs;
 
 public interface ICustomerService
 {
+    Task<Customer> GetCustomerByAccountNumberAsync(int accountNumber);
+
     Task<bool> AddCustomerAsync(RegisterCustomerDto customerDto);
     Task<bool> EditCustomerAsync(RegisterCustomerDto customerDto);
     Task<bool> DeleteCustomerAsync(string email);

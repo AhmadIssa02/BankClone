@@ -1,3 +1,4 @@
+import 'package:bank_app/Screens/transaction_screen.dart'; // Import TransactionScreen
 import 'package:bank_app/Screens/soon_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,12 +18,22 @@ class Service extends StatelessWidget {
         ),
         InkWell(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SoonScreen(),
-              ),
-            );
+            if (name == 'Transfers') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TransactionScreen(),
+                ),
+              );
+            } else {
+              // Otherwise, navigate to SoonScreen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SoonScreen(),
+                ),
+              );
+            }
           },
           child: CircleAvatar(
             backgroundColor: Theme.of(context).cardColor,

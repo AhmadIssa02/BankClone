@@ -18,7 +18,7 @@ class Rewards extends StatelessWidget {
                 backgroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(25),
                 ),
               ),
               onPressed: () {},
@@ -58,7 +58,7 @@ class Rewards extends StatelessWidget {
                 backgroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(25),
                 ),
               ),
               onPressed: () {},

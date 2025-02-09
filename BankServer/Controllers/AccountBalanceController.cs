@@ -73,10 +73,10 @@ namespace BankServer.Controllers
             return Ok(accountBalance);
         }
 
-        [HttpGet("{accountNumber}")]
-        public async Task<IActionResult> GetAccountBalance(int accountNumber)
+        [HttpGet("{customerId}")]
+        public async Task<IActionResult> GetAccountBalance(string customerId)
         {
-            var accountBalance = await _unitOfWork.AccountBalanceRepository.Get(a => a.AccountBalanceId == accountNumber);
+            var accountBalance = await _unitOfWork.AccountBalanceRepository.Get(a => a.CustomerId == customerId);
             if (accountBalance == null)
             {
                 return NotFound("Account balance not found");

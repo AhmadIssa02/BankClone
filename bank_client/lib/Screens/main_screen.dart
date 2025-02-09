@@ -3,6 +3,7 @@ import 'package:bank_app/Components/balance_card.dart';
 import 'package:bank_app/Components/rewards.dart';
 import 'package:bank_app/Components/services.dart';
 import 'package:bank_app/Components/soon.dart';
+import 'package:bank_app/Components/transaction_history.dart';
 import 'package:bank_app/Modules/Auth/auth_guard.dart';
 import 'package:flutter/material.dart';
 import 'package:bank_app/Modules/Auth/auth_manager.dart';
@@ -18,6 +19,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   String _selectedTab = 'Accounts';
+  Widget _selectedWidget = AccountDetails();
   String? name;
 
   @override
@@ -255,7 +257,7 @@ class _MainScreenState extends State<MainScreen> {
                   vertical: 10,
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(15),
                 ),
               ),
               onPressed: () {
@@ -298,12 +300,70 @@ class _MainScreenState extends State<MainScreen> {
         const SizedBox(
           height: 20,
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.0),
-          child: AccountDetails(),
+        Container(
+          color: Colors.white,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _selectedWidget is AccountDetails
+                        ? Theme.of(context).primaryColor
+                        : Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _selectedWidget = const AccountDetails();
+                    });
+                  },
+                  child: Text(
+                    "Account Details",
+                    style: TextStyle(
+                        color: _selectedWidget is AccountDetails
+                            ? Colors.white
+                            : Theme.of(context).primaryColor),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _selectedWidget is TransactionHistory
+                        ? Theme.of(context).primaryColor
+                        : Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _selectedWidget = const TransactionHistory();
+                    });
+                  },
+                  child: Text(
+                    "Transaction History",
+                    style: TextStyle(
+                        color: _selectedWidget is TransactionHistory
+                            ? Colors.white
+                            : Theme.of(context).primaryColor),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         const SizedBox(
-          height: 40,
+          height: 20,
+        ),
+        _selectedWidget,
+        const SizedBox(
+          height: 70,
         ),
       ],
     );

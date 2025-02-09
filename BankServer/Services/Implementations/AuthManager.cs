@@ -59,6 +59,7 @@ namespace BankServer.Services.Implementations
            new Claim("email", _customer.Email),
            new Claim("username", username),
            new Claim("dateOpened", _customer.DateCreated.ToString()),
+           new Claim("accNum", _customer.AccountNumber.ToString()),
 
        };
 

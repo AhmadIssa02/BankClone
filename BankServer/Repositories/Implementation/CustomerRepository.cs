@@ -15,6 +15,11 @@ namespace BankServer.Repositories.Implementation
         {
             _context = context;
         }
+        public async Task<Customer> GetCustomerByAccountNumber(int accountNumber)
+        {
+            return await _context.Customers.FirstOrDefaultAsync(c => c.AccountNumber == accountNumber);
+        }
+
 
         public async Task<bool> addCustomer(Customer customer)
         {

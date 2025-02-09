@@ -1,5 +1,6 @@
 import 'package:bank_app/Modules/Auth/auth_manager.dart';
 import 'package:bank_app/Screens/landing_screen.dart';
+import 'package:bank_app/Screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -62,8 +63,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const LandingScreen(),
+      home: const MainScreen(),
     );
   }
 }
-

@@ -1,11 +1,13 @@
 ﻿namespace BankServer.Repositories.Interfaces
 {
    using BankServer.Models.Domain;
-   using BankServer.Models.DTOs;
 
    public interface ICustomerRepository
    {
-      Task<Customer> getCustomerByEmail(string email);
+        Task<Customer> GetCustomerByAccountNumber(int accountNumber);
+
+
+        Task<Customer> getCustomerByEmail(string email);
       Task<IList<Customer>> getAllCutsomers();
       Task<bool> addCustomer(Customer customerd);
       Task<bool> editCustomer(Customer customer);

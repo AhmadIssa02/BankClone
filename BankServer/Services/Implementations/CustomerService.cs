@@ -18,6 +18,11 @@ namespace BankServer.Services.Implementations
             _customerRepository = customerRepository;
             _mapper = mapper;
         }
+        public async Task<Customer> GetCustomerByAccountNumberAsync(int accountNumber)
+        {
+            return await _customerRepository.GetCustomerByAccountNumber(accountNumber);
+        }
+
 
         public async Task<bool> AddCustomerAsync(RegisterCustomerDto customerDto)
         {

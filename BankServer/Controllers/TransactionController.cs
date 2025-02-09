@@ -1,90 +1,90 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using BankServer.Models.Domain;
-using BankServer.Models.DTOs;
-using Microsoft.AspNetCore.Identity;
-using BankServer.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using BankServer.Models.Domain.BankServer.Models.Domain;
+﻿    using Microsoft.AspNetCore.Mvc;
+    using BankServer.Models.Domain;
+    using BankServer.Models.DTOs;
+    using Microsoft.AspNetCore.Identity;
+    using BankServer.Repositories.Interfaces;
+    using Microsoft.EntityFrameworkCore;
+    using BankServer.Models.Domain.BankServer.Models.Domain;
 
-namespace BankServer.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TransactionController : ControllerBase
+    namespace BankServer.Controllers
     {
-        private readonly UserManager<Customer> _userManager;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly AccountBalanceController _accountBalanceController;
-
-        public TransactionController(UserManager<Customer> userManager, IUnitOfWork unitOfWork, AccountBalanceController accountBalanceController)
+        [Route("api/[controller]")]
+        [ApiController]
+        public class TransactionController : ControllerBase
         {
-            _userManager = userManager;
-            _unitOfWork = unitOfWork;
-            _accountBalanceController = accountBalanceController;
-        }
+            private readonly UserManager<Customer> _userManager;
+            private readonly IUnitOfWork _unitOfWork;
+            private readonly AccountBalanceController _accountBalanceController;
 
-        [HttpPost]
-        [Route("transfer")]
-        public async Task<IActionResult> TransferMoney([FromBody] TransactionDto transactionDto)
-        {
-            // Find sender by account number
-            var sender = await _userManager.Users
-                .FirstOrDefaultAsync(u => u.AccountNumber == transactionDto.SenderAccountNumber);
-
-            if (sender == null)
-                return NotFound("Sender not found");
-
-            // Find receiver by account number
-            var receiver = await _userManager.Users
-                .FirstOrDefaultAsync(u => u.AccountNumber == transactionDto.ReceiverAccountNumber);
-
-            if (receiver == null)
-                return NotFound("Receiver not found");
-
-            // Find sender's AccountBalance using CustomerId
-            var senderBalance = await _unitOfWork.AccountBalanceRepository.Get(a => a.CustomerId == sender.Id);
-            if (senderBalance == null)
-                return NotFound("Sender's account balance not found");
-
-            // Find receiver's AccountBalance using CustomerId
-            var receiverBalance = await _unitOfWork.AccountBalanceRepository.Get(a => a.CustomerId == receiver.Id);
-            if (receiverBalance == null)
-                return NotFound("Receiver's account balance not found");
-
-            if (senderBalance.Balance < transactionDto.Amount)
-                return BadRequest("Insufficient funds");
-
-            var transaction = new Transaction
+            public TransactionController(UserManager<Customer> userManager, IUnitOfWork unitOfWork, AccountBalanceController accountBalanceController)
             {
-                SenderCustomerId = sender.Id,
-                ReceiverCustomerId = receiver.Id,
-                Amount = transactionDto.Amount,
-                TransactionDate = DateTime.UtcNow,
-                Description = transactionDto.Description
-            };
+                _userManager = userManager;
+                _unitOfWork = unitOfWork;
+                _accountBalanceController = accountBalanceController;
+            }
 
-            senderBalance.Balance -= transactionDto.Amount;
-            receiverBalance.Balance += transactionDto.Amount;
-
-            // Save the transaction
-            await _unitOfWork.TransactionRepository.Insert(transaction);
-
-            // Update the sender and receiver balances using AccountBalanceDto
-            var senderBalanceDto = new AccountBalanceDto { CustomerId = sender.Id, Balance = senderBalance.Balance };
-            var receiverBalanceDto = new AccountBalanceDto { CustomerId = receiver.Id, Balance = receiverBalance.Balance };
-
-            // Call the injected AccountBalanceController's UpdateAccountBalance method
-            await _accountBalanceController.UpdateAccountBalance(senderBalanceDto);
-            await _accountBalanceController.UpdateAccountBalance(receiverBalanceDto);
-
-            await _unitOfWork.Save();
-
-            return Ok(new
+            [HttpPost]
+            [Route("transfer")]
+            public async Task<IActionResult> TransferMoney([FromBody] TransactionDto transactionDto)
             {
-                SenderNewBalance = senderBalance.Balance,
-                ReceiverNewBalance = receiverBalance.Balance
-            });
-        }
+
+                var sender = await _userManager.Users
+                    .FirstOrDefaultAsync(u => u.AccountNumber == transactionDto.SenderAccountNumber);
+
+                if (sender == null)
+                    return NotFound("Sender not found");
+
+                // Find receiver by account number
+                var receiver = await _userManager.Users
+                    .FirstOrDefaultAsync(u => u.AccountNumber == transactionDto.ReceiverAccountNumber);
+
+                if (receiver == null)
+                    return NotFound("Receiver not found");
+
+                // Find sender's AccountBalance using CustomerId
+                var senderBalance = await _unitOfWork.AccountBalanceRepository.Get(a => a.CustomerId == sender.Id);
+                if (senderBalance == null)
+                    return NotFound("Sender's account balance not found");
+
+                // Find receiver's AccountBalance using CustomerId
+                var receiverBalance = await _unitOfWork.AccountBalanceRepository.Get(a => a.CustomerId == receiver.Id);
+                if (receiverBalance == null)
+                    return NotFound("Receiver's account balance not found");
+
+                if (senderBalance.Balance < transactionDto.Amount)
+                    return BadRequest("Insufficient funds");
+
+                var transaction = new Transaction
+                {
+                    SenderCustomerId = sender.Id,
+                    ReceiverCustomerId = receiver.Id,
+                    Amount = transactionDto.Amount,
+                    TransactionDate = DateTime.UtcNow,
+                    Description = transactionDto.Description
+                };
+
+                senderBalance.Balance -= transactionDto.Amount;
+                receiverBalance.Balance += transactionDto.Amount;
+
+                // Save the transaction
+                await _unitOfWork.TransactionRepository.Insert(transaction);
+
+                // Update the sender and receiver balances using AccountBalanceDto
+                var senderBalanceDto = new AccountBalanceDto { CustomerId = sender.Id, Balance = senderBalance.Balance };
+                var receiverBalanceDto = new AccountBalanceDto { CustomerId = receiver.Id, Balance = receiverBalance.Balance };
+
+                // Call the injected AccountBalanceController's UpdateAccountBalance method
+                await _accountBalanceController.UpdateAccountBalance(senderBalanceDto);
+                await _accountBalanceController.UpdateAccountBalance(receiverBalanceDto);
+
+                await _unitOfWork.Save();
+
+                return Ok(new
+                {
+                    SenderNewBalance = senderBalance.Balance,
+                    ReceiverNewBalance = receiverBalance.Balance
+                });
+            }
 
         [HttpGet]
         [Route("history/{accountNumber}")]
@@ -101,9 +101,33 @@ namespace BankServer.Controllers
             if (accountBalance == null)
                 return NotFound("Account balance not found");
 
-            var transactions = await _unitOfWork.TransactionRepository.GetAll(t => t.SenderCustomerId == customer.Id || t.ReceiverCustomerId == customer.Id);
+            // Get the transactions for the customer (either sender or receiver)
+            var transactions = await _unitOfWork.TransactionRepository.GetAll(t =>
+                t.SenderCustomerId == customer.Id || t.ReceiverCustomerId == customer.Id);
 
-            return Ok(transactions);
+            // Map the transactions to TransactionDto with account numbers
+            var transactionDtos = new List<TransactionDto>();
+            foreach (var t in transactions)
+            {
+                // Get sender account number
+                var sender = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == t.SenderCustomerId);
+                var senderAccountNumber = sender?.AccountNumber ?? 0;
+
+                // Get receiver account number
+                var receiver = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == t.ReceiverCustomerId);
+                var receiverAccountNumber = receiver?.AccountNumber ?? 0;
+
+                transactionDtos.Add(new TransactionDto
+                {
+                    SenderAccountNumber = senderAccountNumber,
+                    ReceiverAccountNumber = receiverAccountNumber,
+                    Amount = t.Amount,
+                    Description = t.Description
+                });
+            }
+
+            return Ok(transactionDtos);
         }
+
     }
 }
