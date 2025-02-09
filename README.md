@@ -106,29 +106,35 @@ Make sure to configure your API to securely handle **JWT authentication** and **
 
 ## 📸 Screenshots
 
-### 1. Login Screen
+### 1. Landing Screen
 
-![Login Screen](path/to/login-screen-image.png)
+![Landing Screen](images/landing.png)
 
-### 2. Register Screen
+### 2. Login Screen
 
-![Dashboard Screen](path/to/dashboard-screen-image.png)
+![Login Screen](images/login.png)
 
-### 3. Dashboard Screen
+### 3. Register Screen
 
-![Dashboard Screen](path/to/dashboard-screen-image.png)
+![Register Screen](images/register.png)
 
-### 4. Transfer Money Screen 
+### 4. Dashboard Screen
 
-![Dashboard Screen](path/to/dashboard-screen-image.png)
+![Dashboard Screen](images/dashboard.png)
+![Dashboard Screen](images/dashboard2.png)
 
-### 5. Transaction History
+### 5. Transfer Money Screen 
 
-![Transaction History](path/to/transaction-history-image.png)
+![Transfer Screen](transfer.png)
 
-### 6. User Management Screen
+### 6. Transaction History
 
-![Transaction History](path/to/transaction-history-image.png)
+![Transaction History](transactionHistory.png)
+
+### 7. User Management Screen
+
+![Settings](settings.png)
+![Settings](settings2.png)
 
 ---
 

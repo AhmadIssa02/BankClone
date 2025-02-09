@@ -37,7 +37,6 @@ namespace BankServer.Controllers
                 Console.WriteLine("null");
                 return NotFound("Customer not found");
             }
-            Console.WriteLine("result is here:" + result);
             return Ok(result);
         }
         [HttpGet("getAll")]

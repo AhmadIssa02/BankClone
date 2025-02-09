@@ -69,11 +69,14 @@ class _TransactionHistoryState extends State<TransactionHistory> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'History',
+            'Latest Transactions',
             style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).primaryColor),
+          ),
+          const SizedBox(
+            height: 15,
           ),
           isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -111,7 +114,7 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 FutureBuilder<String>(
-                                  future: isIncoming
+                                  future: !isIncoming
                                       ? _getCustomerName(
                                           transaction.receiverAccountNumber)
                                       : _getCustomerName(

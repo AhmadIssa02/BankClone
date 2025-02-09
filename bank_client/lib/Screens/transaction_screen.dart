@@ -69,9 +69,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
       description: description,
     );
 
-    print(transaction.toJson());
-    print(transaction.toString());
-
     final success = await TransactionRepository().transferMoney(transaction);
 
     setState(() {
@@ -148,9 +145,19 @@ class _TransactionScreenState extends State<TransactionScreen> {
               const SizedBox(height: 20),
               _isSubmitting
                   ? const Center(child: CircularProgressIndicator())
-                  : ElevatedButton(
-                      onPressed: _createTransaction,
-                      child: const Text('Submit Transaction'),
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        onPressed: _createTransaction,
+                        child: const Text(
+                          'Submit Transaction',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 16),
+                        ),
+                      ),
                     ),
             ],
           ),
